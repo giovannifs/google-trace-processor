@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="google-trace-processor">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/bd_processor" />
+      <root url="file://$PROJECT_DIR$/main" />
+    </SOURCES>
+  </library>
+</component>
