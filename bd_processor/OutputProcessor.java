@@ -3,7 +3,7 @@ import java.util.Properties;
 
 public class OutputProcessor extends DataStore{
 
-    public static final String DATABASE_URL_PROP = "output_tasks_database_url";
+    public static final String DATABASE_URL_PROP = "output_trace_database_url";
 
     private static final String TABLE_NAME = "tasks";
 
