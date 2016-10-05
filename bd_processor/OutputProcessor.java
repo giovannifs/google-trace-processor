@@ -1,4 +1,5 @@
 import java.sql.*;
+import java.util.List;
 import java.util.Properties;
 
 public class OutputProcessor extends DataStore{
@@ -42,8 +43,8 @@ public class OutputProcessor extends DataStore{
     private static final String INSERT_TASK_SQL = "INSERT INTO " + TABLE_NAME
             + " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-    public boolean addTask(ResultSet results) {
-        if (results == null) {
+    public boolean addTasks(List<TaskInfo> list_of_tasks) {
+        if (list_of_tasks == null) {
             return false;
         }
 
@@ -59,7 +60,9 @@ public class OutputProcessor extends DataStore{
             insertMemberStatement = connection
                     .prepareStatement(INSERT_TASK_SQL);
 
-            addTask(insertMemberStatement, results);
+            for (TaskInfo taskInfo : list_of_tasks) {
+                addTask(insertMemberStatement, taskInfo);
+            }
             int[] executeBatch = insertMemberStatement.executeBatch();
 
             if (executionFailed(connection, executeBatch)){
@@ -95,18 +98,18 @@ public class OutputProcessor extends DataStore{
     }
 
     private void addTask(PreparedStatement insertMemberStatement,
-                         ResultSet results) throws SQLException {
-        insertMemberStatement.setDouble(1, results.getDouble("submitTime"));
-        insertMemberStatement.setDouble(2, results.getDouble("jid"));
-        insertMemberStatement.setInt(3, results.getInt("tid"));
-        insertMemberStatement.setString(4, results.getString("user"));
-        insertMemberStatement.setInt(5, results.getInt("schedulingClass"));
-        insertMemberStatement.setInt(6, results.getInt("priority"));
-        insertMemberStatement.setDouble(7, results.getDouble("runtime"));
-        insertMemberStatement.setDouble(8, results.getDouble("endTime"));
-        insertMemberStatement.setDouble(9, results.getDouble("cpuReq"));
-        insertMemberStatement.setDouble(10, results.getDouble("memReq"));
-        insertMemberStatement.setString(11, results.getString("userClass"));
+                         TaskInfo taskInfo) throws SQLException {
+        insertMemberStatement.setDouble(1, taskInfo.getSubmitTime());
+        insertMemberStatement.setDouble(2, taskInfo.getJob_id());
+        insertMemberStatement.setInt(3, taskInfo.getTask_id());
+        insertMemberStatement.setString(4, taskInfo.getUser());
+        insertMemberStatement.setInt(5, taskInfo.getSchedulingClass());
+        insertMemberStatement.setInt(6, taskInfo.getPriority());
+        insertMemberStatement.setDouble(7, taskInfo.getRuntime());
+        insertMemberStatement.setDouble(8, taskInfo.getEndTime());
+        insertMemberStatement.setDouble(9, taskInfo.getCpuReq());
+        insertMemberStatement.setDouble(10, taskInfo.getMemReq());
+        insertMemberStatement.setString(11, taskInfo.getUserClass());
         insertMemberStatement.addBatch();
     }
 

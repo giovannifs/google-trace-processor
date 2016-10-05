@@ -1,5 +1,9 @@
+import com.sun.javafx.tk.Toolkit;
+
 import java.io.*;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 public class Main{
@@ -24,6 +28,9 @@ public class Main{
             BufferedReader br = null;
             String line = "";
             String cvsSplitBy = ",";
+            int TIME_TO_STORAGE = 5000;
+            List<TaskInfo> list_of_tasks = new ArrayList<>();
+            TaskInfo taskInfo;
 
             try {
 
@@ -35,17 +42,17 @@ public class Main{
                     // use comma as separator
                     String[] task = line.split(cvsSplitBy);
 
-                    double jid = Double.parseDouble(task[8]);
-                    int tid = Integer.parseInt(task[9]);
+                    double jid = Double.parseDouble(task[0]);
+                    int tid = Integer.parseInt(task[1]);
 
-                    System.out.println("----------------------------");
-                    System.out.println("jid = " + jid + "tid = " + tid);
+                    taskInfo = inputProcessor.getTask(jid, tid);
+                    list_of_tasks.add(taskInfo);
 
-                    ResultSet result = inputProcessor.getTask(jid, tid);
-                    System.out.println("jid = " + result.getDouble("jid") + "tid = " + result.getInt("tid"));
-                    System.out.println("----------------------------");
-
-                    outputProcessor.addTask(result);
+                    if (list_of_tasks.size() == TIME_TO_STORAGE){
+                        System.out.println("Atingiu " + TIME_TO_STORAGE);
+                        outputProcessor.addTasks(list_of_tasks);
+                        list_of_tasks.clear();
+                    }
 
                 }
 

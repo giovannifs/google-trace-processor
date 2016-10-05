@@ -10,7 +10,7 @@ public class InputProcessor extends DataStore{
 
     }
 
-    public ResultSet getTask(double jobId, int taskId) {
+    public TaskInfo getTask(double jobId, int taskId) {
         Statement statement = null;
         Connection connection;
         try {
@@ -23,7 +23,12 @@ public class InputProcessor extends DataStore{
 
                 ResultSet results = statement.executeQuery(sql);
 
-                return results;
+                TaskInfo taskInfo = new TaskInfo(results.getDouble("submitTime"), results.getDouble("jid"), results.getInt("tid"),
+                        results.getString("user"), results.getInt("schedulingClass"), results.getInt("priority"),
+                        results.getDouble("runtime"), results.getDouble("endTime"), results.getDouble("cpuReq"),
+                        results.getDouble("memReq"), results.getString("userClass"));
+
+                return taskInfo;
 
             }
         } catch (Exception e) {
