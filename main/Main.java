@@ -1,7 +1,5 @@
-import com.sun.javafx.tk.Toolkit;
 
 import java.io.*;
-import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -28,7 +26,7 @@ public class Main{
             BufferedReader br = null;
             String line = "";
             String cvsSplitBy = ",";
-            int TIME_TO_STORAGE = 5000;
+            int TIME_TO_STORAGE = 1000;
             List<TaskInfo> list_of_tasks = new ArrayList<>();
             TaskInfo taskInfo;
 
@@ -44,8 +42,10 @@ public class Main{
 
                     double jid = Double.parseDouble(task[0]);
                     int tid = Integer.parseInt(task[1]);
-
+                    long now = System.currentTimeMillis();
                     taskInfo = inputProcessor.getTask(jid, tid);
+                    System.out.println(System.currentTimeMillis() - now);
+
                     list_of_tasks.add(taskInfo);
 
                     if (list_of_tasks.size() == TIME_TO_STORAGE){
@@ -76,10 +76,6 @@ public class Main{
         }
 
     }
-
-
-
-
 }
 
 

@@ -19,7 +19,7 @@ public class InputProcessor extends DataStore{
             if (connection != null) {
                 statement = connection.createStatement();
 
-                String sql = "SELECT * FROM tasks WHERE jid == '" + jobId + "' AND tid == '" + taskId + "'";
+                String sql = "SELECT * FROM tasks WHERE jid == '" + jobId + "' AND tid == '" + taskId + "' LIMIT 1";
 
                 ResultSet results = statement.executeQuery(sql);
 
