@@ -1,13 +1,13 @@
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 public class Main{
 
     public static String CSV_URL_PROP = "input_trace_admission_control_url";
 
+    private static final int INTERVAL_SIZE = 5;
+    private int intervalIndex = 0;
     private static InputProcessor inputProcessor;
     private static OutputProcessor outputProcessor;
 
@@ -27,13 +27,22 @@ public class Main{
             String line = "";
             String cvsSplitBy = ",";
             int TIME_TO_STORAGE = 1000;
-            List<TaskInfo> list_of_tasks = new ArrayList<>();
+
+            List<TaskInfo> tasksToBd = new ArrayList<>();
+            List<TaskInfo> tasksOfInterval = new ArrayList<>();
+
             TaskInfo taskInfo;
+
+
+
 
             try {
 
                 br = new BufferedReader(new FileReader(csvFile));
                 line = br.readLine();
+
+                long start = System.currentTimeMillis();
+                System.out.println(start);
 
                 while ((line = br.readLine()) != null) {
 
@@ -44,14 +53,16 @@ public class Main{
                     int tid = Integer.parseInt(task[1]);
                     long now = System.currentTimeMillis();
                     taskInfo = inputProcessor.getTask(jid, tid);
+
                     System.out.println(System.currentTimeMillis() - now);
+                    System.out.println(start - System.currentTimeMillis());
+                   
+                    tasksToBd.add(taskInfo);
 
-                    list_of_tasks.add(taskInfo);
-
-                    if (list_of_tasks.size() == TIME_TO_STORAGE){
+                    if (tasksToBd.size() == TIME_TO_STORAGE){
                         System.out.println("Atingiu " + TIME_TO_STORAGE);
-                        outputProcessor.addTasks(list_of_tasks);
-                        list_of_tasks.clear();
+                        outputProcessor.addTasks(tasksToBd);
+                        tasksToBd.clear();
                     }
 
                 }
@@ -77,5 +88,6 @@ public class Main{
 
     }
 }
+
 
 
