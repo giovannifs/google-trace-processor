@@ -2,18 +2,18 @@
 import java.io.*;
 import java.util.*;
 
-public class Main{
+public class Main {
 
     public static String CSV_URL_PROP = "input_trace_admission_control_url";
 
     private static final int INTERVAL_SIZE = 5;
-    private int intervalIndex = 0;
+    private static int intervalIndex = 0;
     private static InputProcessor inputProcessor;
     private static OutputProcessor outputProcessor;
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
 
-        try{
+        try {
             Properties properties = new Properties();
             FileInputStream input = new FileInputStream(args[0]);
             properties.load(input);
@@ -23,24 +23,44 @@ public class Main{
 
 
             String csvFile = properties.getProperty(CSV_URL_PROP);
-            BufferedReader br = null;
-            String line = "";
-            String cvsSplitBy = ",";
-            int TIME_TO_STORAGE = 1000;
+            BufferedReader br = new BufferedReader(new FileReader(csvFile));
 
             List<TaskInfo> tasksToBd = new ArrayList<>();
-            List<TaskInfo> tasksOfInterval = new ArrayList<>();
 
-            TaskInfo taskInfo;
+            long searchTime = System.currentTimeMillis();
+            List<TaskInfo> tasksOfInterval = inputProcessor.getTaskInterval(intervalIndex, INTERVAL_SIZE);
+            System.out.println("Search duration in bd is:" + (System.currentTimeMillis() - searchTime) + " milliseconds");
 
 
+            while (tasksOfInterval != null) {
 
+                long now = System.currentTimeMillis();
+                filterAdmittedTasks(br, tasksToBd, tasksOfInterval);
+                System.out.println("Filter admitted tasks in:" + (System.currentTimeMillis() - now) + " milliseconds");
+
+                outputProcessor.addTasks(tasksToBd);
+                System.out.println("Add tasks of interval: " + intervalIndex);
+                tasksToBd.clear();
+
+                tasksOfInterval = inputProcessor.getTaskInterval(intervalIndex++, INTERVAL_SIZE);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private static void filterAdmittedTasks(BufferedReader br, List<TaskInfo> tasksToBd, List<TaskInfo> tasksOfInterval) {
+
+        String line = "";
+        String cvsSplitBy = ",";
+
+        for (TaskInfo taskInfo : tasksOfInterval) {
 
             try {
 
-                br = new BufferedReader(new FileReader(csvFile));
                 line = br.readLine();
-
                 long start = System.currentTimeMillis();
                 System.out.println(start);
 
@@ -51,19 +71,12 @@ public class Main{
 
                     double jid = Double.parseDouble(task[0]);
                     int tid = Integer.parseInt(task[1]);
-                    long now = System.currentTimeMillis();
-                    taskInfo = inputProcessor.getTask(jid, tid);
 
-                    System.out.println(System.currentTimeMillis() - now);
-                    System.out.println(start - System.currentTimeMillis());
-                   
-                    tasksToBd.add(taskInfo);
-
-                    if (tasksToBd.size() == TIME_TO_STORAGE){
-                        System.out.println("Atingiu " + TIME_TO_STORAGE);
-                        outputProcessor.addTasks(tasksToBd);
-                        tasksToBd.clear();
+                    if (taskInfo.getJob_id() == jid && taskInfo.getTask_id() == tid) {
+                        tasksToBd.add(taskInfo);
+                        break;
                     }
+
 
                 }
 
@@ -80,12 +93,7 @@ public class Main{
                     }
                 }
             }
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-
     }
 }
 
