@@ -11,7 +11,7 @@ public class Main {
     private static InputProcessor inputProcessor;
     private static OutputProcessor outputProcessor;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
         try {
             Properties properties = new Properties();
@@ -23,27 +23,22 @@ public class Main {
 
 
             String csvFile = properties.getProperty(CSV_URL_PROP);
-            BufferedReader br = new BufferedReader(new FileReader(csvFile));
+            RandomAccessFile raf = new RandomAccessFile(new File(csvFile), "r");
 
             List<TaskInfo> tasksToBd = new ArrayList<>();
-
-            long searchTime = System.currentTimeMillis();
-            List<TaskInfo> tasksOfInterval = inputProcessor.getTaskInterval(intervalIndex, INTERVAL_SIZE);
-            System.out.println("Search duration in bd is:" + (System.currentTimeMillis() - searchTime) + " milliseconds");
-
+            List<TaskInfo> tasksOfInterval = inputProcessor.getTaskInterval(intervalIndex, getTimeInMicro(INTERVAL_SIZE));
 
             while (tasksOfInterval != null) {
 
-                long now = System.currentTimeMillis();
-                filterAdmittedTasks(br, tasksToBd, tasksOfInterval);
-                System.out.println("Filter admitted tasks in:" + (System.currentTimeMillis() - now) + " milliseconds");
+                filterAdmittedTasks(raf, tasksToBd, tasksOfInterval);
 
                 outputProcessor.addTasks(tasksToBd);
-                System.out.println("Add tasks of interval: " + intervalIndex);
                 tasksToBd.clear();
 
-                tasksOfInterval = inputProcessor.getTaskInterval(intervalIndex++, INTERVAL_SIZE);
+                tasksOfInterval = inputProcessor.getTaskInterval(intervalIndex++, getTimeInMicro(INTERVAL_SIZE));
             }
+            raf.close();
+
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -51,7 +46,8 @@ public class Main {
 
     }
 
-    private static void filterAdmittedTasks(BufferedReader br, List<TaskInfo> tasksToBd, List<TaskInfo> tasksOfInterval) {
+
+    private static void filterAdmittedTasks(RandomAccessFile raf, List<TaskInfo> tasksToBd, List<TaskInfo> tasksOfInterval) throws IOException {
 
         String line = "";
         String cvsSplitBy = ",";
@@ -60,11 +56,13 @@ public class Main {
 
             try {
 
-                line = br.readLine();
+                raf.seek(0);
+                line = raf.readLine();
+
                 long start = System.currentTimeMillis();
                 System.out.println(start);
 
-                while ((line = br.readLine()) != null) {
+                while ((line = raf.readLine()) != null) {
 
                     // use comma as separator
                     String[] task = line.split(cvsSplitBy);
@@ -73,28 +71,23 @@ public class Main {
                     int tid = Integer.parseInt(task[1]);
 
                     if (taskInfo.getJob_id() == jid && taskInfo.getTask_id() == tid) {
+                        System.out.println("A task com jid=" + taskInfo.getJob_id() + " e com id=" + taskInfo.getTask_id() + " foi adicionada a lista.");
                         tasksToBd.add(taskInfo);
                         break;
                     }
-
-
                 }
-
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
-            } finally {
-                if (br != null) {
-                    try {
-                        br.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
             }
         }
     }
+
+    public static double getTimeInMicro(double timeInMinute) {
+        return timeInMinute * 60 * 1000000;
+    }
+
 }
 
 
