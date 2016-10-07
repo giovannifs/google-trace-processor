@@ -63,6 +63,7 @@ public class OutputProcessor extends DataStore{
             for (TaskInfo taskInfo : list_of_tasks) {
                 addTask(insertMemberStatement, taskInfo);
             }
+
             int[] executeBatch = insertMemberStatement.executeBatch();
 
             if (executionFailed(connection, executeBatch)){
@@ -110,7 +111,6 @@ public class OutputProcessor extends DataStore{
         insertMemberStatement.setDouble(9, taskInfo.getCpuReq());
         insertMemberStatement.setDouble(10, taskInfo.getMemReq());
         insertMemberStatement.setString(11, taskInfo.getUserClass());
-        System.out.println("A task com jid=" + taskInfo.getJob_id() + " e com id=" + taskInfo.getTask_id() + " foi preparada para o BD.");
         insertMemberStatement.addBatch();
     }
 

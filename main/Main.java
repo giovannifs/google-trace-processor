@@ -10,6 +10,7 @@ public class Main {
     private static int intervalIndex = 0;
     private static InputProcessor inputProcessor;
     private static OutputProcessor outputProcessor;
+    private static Map<String, Integer> map_tasks;
 
     public static void main(String[] args) throws IOException {
 
@@ -20,24 +21,27 @@ public class Main {
 
             inputProcessor = new InputProcessor(properties);
             outputProcessor = new OutputProcessor(properties);
+            map_tasks = new HashMap<>();
 
-
-            String csvFile = properties.getProperty(CSV_URL_PROP);
-            RandomAccessFile raf = new RandomAccessFile(new File(csvFile), "r");
+            readCSV(properties);
+            System.out.println("Finalizando processamento do mapa. Seu tamanho é: " + map_tasks.size());
 
             List<TaskInfo> tasksToBd = new ArrayList<>();
             List<TaskInfo> tasksOfInterval = inputProcessor.getTaskInterval(intervalIndex, getTimeInMicro(INTERVAL_SIZE));
+            System.out.println("Interval index " + intervalIndex + " = " + tasksOfInterval.size());
 
             while (tasksOfInterval != null) {
 
-                filterAdmittedTasks(raf, tasksToBd, tasksOfInterval);
-
+                filterAdmittedTasks(tasksToBd, tasksOfInterval);
+                System.out.println("Adicionando " + tasksToBd.size() + " ao BD");
                 outputProcessor.addTasks(tasksToBd);
+
+
                 tasksToBd.clear();
 
                 tasksOfInterval = inputProcessor.getTaskInterval(intervalIndex++, getTimeInMicro(INTERVAL_SIZE));
+                System.out.println("Interval index " + intervalIndex + " = " + tasksOfInterval.size());
             }
-            raf.close();
 
 
         } catch (Exception e) {
@@ -46,40 +50,48 @@ public class Main {
 
     }
 
+    private static void readCSV(Properties properties){
 
-    private static void filterAdmittedTasks(RandomAccessFile raf, List<TaskInfo> tasksToBd, List<TaskInfo> tasksOfInterval) throws IOException {
+        try {
+            String csvFile = properties.getProperty(CSV_URL_PROP);
+            String line = "";
+            String cvsSplitBy = ",";
+            BufferedReader br = new BufferedReader(new FileReader(csvFile));
 
-        String line = "";
-        String cvsSplitBy = ",";
+            line = br.readLine();
+
+            long start = System.currentTimeMillis();
+            System.out.println(start);
+            while ((line = br.readLine()) != null) {
+
+                // use comma as separator
+                String[] task = line.split(cvsSplitBy);
+
+                double jid = Double.parseDouble(task[0]);
+                int tid = Integer.parseInt(task[1]);
+
+
+                String concat = "";
+                concat += jid + tid;
+                map_tasks.put(concat, null);
+            }
+            br.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    private static void filterAdmittedTasks(List<TaskInfo> tasksToBd, List<TaskInfo> tasksOfInterval) throws IOException {
 
         for (TaskInfo taskInfo : tasksOfInterval) {
-
-            try {
-
-                raf.seek(0);
-                line = raf.readLine();
-
-                long start = System.currentTimeMillis();
-                System.out.println(start);
-
-                while ((line = raf.readLine()) != null) {
-
-                    // use comma as separator
-                    String[] task = line.split(cvsSplitBy);
-
-                    double jid = Double.parseDouble(task[0]);
-                    int tid = Integer.parseInt(task[1]);
-
-                    if (taskInfo.getJob_id() == jid && taskInfo.getTask_id() == tid) {
-                        System.out.println("A task com jid=" + taskInfo.getJob_id() + " e com id=" + taskInfo.getTask_id() + " foi adicionada a lista.");
-                        tasksToBd.add(taskInfo);
-                        break;
-                    }
-                }
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
+            String concat = "";
+            concat += taskInfo.getJob_id() + taskInfo.getTask_id();
+            if (map_tasks.containsKey(concat)){
+                tasksToBd.add(taskInfo);
             }
         }
     }
