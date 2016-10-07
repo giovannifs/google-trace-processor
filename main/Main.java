@@ -10,7 +10,7 @@ public class Main {
     private static int intervalIndex = 0;
     private static InputProcessor inputProcessor;
     private static OutputProcessor outputProcessor;
-    private static Map<String, Integer> map_tasks;
+    private static Map<String, Integer> mapOfTasks;
 
     public static void main(String[] args) throws IOException {
 
@@ -21,32 +21,26 @@ public class Main {
 
             inputProcessor = new InputProcessor(properties);
             outputProcessor = new OutputProcessor(properties);
-            map_tasks = new HashMap<>();
+            mapOfTasks = new HashMap<>();
 
             readCSV(properties);
-            System.out.println("Finalizando processamento do mapa. Seu tamanho é: " + map_tasks.size());
+            System.out.println("Finalizando processamento do mapa. Seu tamanho é: " + mapOfTasks.size());
 
             List<TaskInfo> tasksToBd = new ArrayList<>();
-            List<TaskInfo> tasksOfInterval = inputProcessor.getTaskInterval(intervalIndex, getTimeInMicro(INTERVAL_SIZE));
-            System.out.println("Interval index " + intervalIndex + " = " + tasksOfInterval.size());
+            List<TaskInfo> tasksOfInterval;
 
-            while (tasksOfInterval != null) {
-
-                filterAdmittedTasks(tasksToBd, tasksOfInterval);
-                System.out.println("Adicionando " + tasksToBd.size() + " ao BD");
-                outputProcessor.addTasks(tasksToBd);
-
-
-                tasksToBd.clear();
+            do {
 
                 tasksOfInterval = inputProcessor.getTaskInterval(intervalIndex++, getTimeInMicro(INTERVAL_SIZE));
+                System.out.println("Interval index " + (intervalIndex - 1) + " = " + tasksOfInterval.size());
 
-                if (tasksOfInterval != null){
-                    System.out.println("Interval index " + intervalIndex + " = " + tasksOfInterval.size());
-                }
+                filterAdmittedTasks(tasksToBd, tasksOfInterval);
 
-            }
+                System.out.println("Adicionando " + tasksToBd.size() + " ao BD");
+                outputProcessor.addTasks(tasksToBd);
+                tasksToBd.clear();
 
+            } while (tasksOfInterval != null);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -77,7 +71,7 @@ public class Main {
 
                 String concat = "";
                 concat += String.valueOf(jid) + String.valueOf(tid);
-                map_tasks.put(concat, null);
+                mapOfTasks.put(concat, null);
             }
             br.close();
         } catch (FileNotFoundException e) {
@@ -94,7 +88,7 @@ public class Main {
         for (TaskInfo taskInfo : tasksOfInterval) {
             String concat = "";
             concat += String.valueOf(taskInfo.getJob_id()) + String.valueOf(taskInfo.getTask_id());
-            if (map_tasks.containsKey(concat)){
+            if (mapOfTasks.containsKey(concat)){
                 tasksToBd.add(taskInfo);
             }
         }

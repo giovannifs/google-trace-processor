@@ -18,7 +18,7 @@ public class TaskInfo {
         setEndTime(endTime);
         setCpuReq(cpuReq);
         setMemReq(memReq);
-        setUser(userClass);
+        setUserClass(userClass);
     }
 
     public void setSubmitTime(double submitTime) {
