@@ -40,7 +40,11 @@ public class Main {
                 tasksToBd.clear();
 
                 tasksOfInterval = inputProcessor.getTaskInterval(intervalIndex++, getTimeInMicro(INTERVAL_SIZE));
-                System.out.println("Interval index " + intervalIndex + " = " + tasksOfInterval.size());
+
+                if (tasksOfInterval != null){
+                    System.out.println("Interval index " + intervalIndex + " = " + tasksOfInterval.size());
+                }
+
             }
 
 
@@ -72,7 +76,7 @@ public class Main {
 
 
                 String concat = "";
-                concat += jid + tid;
+                concat += String.valueOf(jid) + String.valueOf(tid);
                 map_tasks.put(concat, null);
             }
             br.close();
@@ -89,7 +93,7 @@ public class Main {
 
         for (TaskInfo taskInfo : tasksOfInterval) {
             String concat = "";
-            concat += taskInfo.getJob_id() + taskInfo.getTask_id();
+            concat += String.valueOf(taskInfo.getJob_id()) + String.valueOf(taskInfo.getTask_id());
             if (map_tasks.containsKey(concat)){
                 tasksToBd.add(taskInfo);
             }
