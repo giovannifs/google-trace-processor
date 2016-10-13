@@ -32,11 +32,14 @@ public class Main {
             do {
 
                 tasksOfInterval = inputProcessor.getTaskInterval(intervalIndex++, getTimeInMicro(INTERVAL_SIZE));
-                System.out.println("Interval index " + (intervalIndex - 1) + " = " + tasksOfInterval.size());
+
+                if (tasksOfInterval != null)
+                    System.out.println("Interval index " + (intervalIndex - 1) + " = " + tasksOfInterval.size());
 
                 filterAdmittedTasks(tasksToBd, tasksOfInterval);
 
                 System.out.println("Adicionando " + tasksToBd.size() + " ao BD");
+
                 outputProcessor.addTasks(tasksToBd);
                 tasksToBd.clear();
 
