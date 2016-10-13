@@ -4,12 +4,11 @@ import java.util.Properties;
 
 public class OutputProcessor extends DataStore{
 
-    public static final String DATABASE_URL_PROP = "output_trace_database_url";
 
     private static final String TABLE_NAME = "tasks";
 
-    public OutputProcessor(Properties properties) {
-        super(properties.getProperty(DATABASE_URL_PROP));
+    public OutputProcessor(Properties properties, String destiny) {
+        super(properties.getProperty(destiny));
 
         Statement statement = null;
         Connection connection = null;

@@ -5,6 +5,8 @@ import java.util.*;
 public class Main {
 
     public static String CSV_URL_PROP = "input_trace_admission_control_url";
+    public static final String DATABASE_URL_PROP = "output_trace_database_url";
+
 
     private static final int INTERVAL_SIZE = 5;
     private static int intervalIndex = 0;
@@ -20,7 +22,7 @@ public class Main {
             properties.load(input);
 
             inputProcessor = new InputProcessor(properties);
-            outputProcessor = new OutputProcessor(properties);
+            outputProcessor = new OutputProcessor(properties, DATABASE_URL_PROP);
             mapOfTasks = new HashMap<>();
 
             readCSV(properties);
