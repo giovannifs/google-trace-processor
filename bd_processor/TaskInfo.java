@@ -6,6 +6,20 @@ public class TaskInfo {
     private int task_id, priority, schedulingClass;
     private String user, userClass;
 
+    /**
+     * Constructor that contains information about Vm
+     * @param submitTime - submitTime of VM
+     * @param job_id - jid of VM in database
+     * @param task_id - tid of VM in database
+     * @param user - user of VM
+     * @param schedulingClass - schedulingClass of VM
+     * @param priority - priority of VM (0, 1 or 2)
+     * @param runtime - runtime of VM
+     * @param endTime - submitTime of VM
+     * @param cpuReq - cpu requested by VM
+     * @param memReq - memory requested by VM
+     * @param userClass - user class of VM
+     */
     public TaskInfo(double submitTime, double job_id, int task_id, String user, int schedulingClass, int priority, double runtime,
                     double endTime, double cpuReq, double memReq, String userClass){
         setJob_id(job_id);

@@ -25,7 +25,12 @@ public class InputProcessor extends DataStore{
 
     }
 
-    public TaskInfo getTask(ResultSet results) {
+    /**
+     * Operation that converts a ResultSet in a TaskInfo
+     * @param results - Receive as a parameter an object of ResultSet that contatains informations of a Vm from BD
+     * @return An object of TaskInfo that represents a VM.
+     */
+    private TaskInfo getTask(ResultSet results) {
 
 
         try {
@@ -43,6 +48,12 @@ public class InputProcessor extends DataStore{
         }
     }
 
+    /**
+     * Operation that receives a intervalIndex and intervalSize, search tasks in BD and returns all of them.
+     * @param intervalIndex - index of each interval
+     * @param intervalSize - Time gap of each interval index
+     * @return A list of TaskInfo
+     */
     public List<TaskInfo> getTaskInterval(int intervalIndex, double intervalSize) {
 
         if (intervalIndex < 0){
@@ -89,6 +100,13 @@ public class InputProcessor extends DataStore{
         return googleTasks;
     }
 
+
+    /**
+     * Operation that receives a interval index e and a interval size and verifying if has more events in BD
+     * @param intervalIndex - index of each interval
+     * @param intervalSize - Time gap of each interval index
+     * @return a boolean if has more tasks in BD in the interval
+     */
     public boolean hasMoreEvents(int intervalIndex,
                                  double intervalSize) {
         return (intervalIndex >= 0 && (intervalIndex * intervalSize) <= getMaxInterestedTime());
@@ -98,6 +116,12 @@ public class InputProcessor extends DataStore{
         return properties.getProperty(propKey) != null;
     }
 
+    /**
+     *
+     * @return max submitTime that the trace contains
+     * @throws ClassNotFoundException
+     * @throws SQLException
+     */
     protected double getMaxTraceTime() throws ClassNotFoundException,
             SQLException {
         Statement statement = null;

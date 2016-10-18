@@ -7,6 +7,11 @@ public class OutputProcessor extends DataStore{
 
     private static final String TABLE_NAME = "tasks";
 
+    /**
+     * Constructor that create a table where the tasks will be inserted
+     * @param properties - File of configuration
+     * @param destiny - Name of parameter existed in configuration that contains the URL
+     */
     public OutputProcessor(Properties properties, String destiny) {
         super(properties.getProperty(destiny));
 
@@ -42,6 +47,12 @@ public class OutputProcessor extends DataStore{
     private static final String INSERT_TASK_SQL = "INSERT INTO " + TABLE_NAME
             + " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
+
+    /**
+     * Operation that add a list of tasks into a BD
+     * @param list_of_tasks that contains objects of TaskInfo
+     * @return A boolean that represents the success of operation
+     */
     public boolean addTasks(List<TaskInfo> list_of_tasks) {
         if (list_of_tasks == null) {
             return false;
@@ -97,6 +108,13 @@ public class OutputProcessor extends DataStore{
         return false;
     }
 
+
+    /**
+     * Operation that add a task info into a batch to prepare that will be inserted into BD
+     * @param insertMemberStatement
+     * @param taskInfo - A unique object of TaskInfo
+     * @throws SQLException
+     */
     private void addTask(PreparedStatement insertMemberStatement,
                          TaskInfo taskInfo) throws SQLException {
         insertMemberStatement.setDouble(1, taskInfo.getSubmitTime());
