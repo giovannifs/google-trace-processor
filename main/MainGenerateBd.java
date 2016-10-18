@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Properties;
 
 /**
+ * The main that generates a BD with expected features.
  * Created by Alessandro Lia Fook Santos and Joao Victor Mafra on 13/10/16.
  */
 public class MainGenerateBd {
@@ -37,6 +38,11 @@ public class MainGenerateBd {
 
     }
 
+    /**
+     * Operation that creates and generates a set of tasks with selected features by adding the list recieved as a
+     * parameter.
+     * @param taskList - The list that will contain all tasks genereted.
+     */
     private static void createTasks(List<TaskInfo> taskList) {
 
         int taskId = 0;
@@ -45,7 +51,7 @@ public class MainGenerateBd {
         for (int i = 0; i < NUMBER_OF_TASKS; i++) {
 
             TaskInfo task = new TaskInfo(getTimeInMicro(0), jobId++, taskId++, UNUSED_NAME, UNUSED_INT, 11,
-                                getTimeInMicro(8), getTimeInMicro(8), 0.5, UNUSED_DOUBLE, "prod");
+                    getTimeInMicro(8), getTimeInMicro(8), 0.5, UNUSED_DOUBLE, "prod");
             taskList.add(task);
         }
 
@@ -86,6 +92,11 @@ public class MainGenerateBd {
         System.out.println(taskId);
     }
 
+    /**
+     * Operation that recieves the time in minutes and corvert to time in microsseconds.
+     * @param timeInMinute
+     * @return The value recieved as parametter in microsseconds.
+     */
     public static double getTimeInMicro(double timeInMinute) {
         return timeInMinute * 60 * 1000000;
     }

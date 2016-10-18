@@ -2,6 +2,11 @@
 import java.io.*;
 import java.util.*;
 
+/**
+ * The main filtering the selected database containing all tasks submitted tasks.
+ * Created by jvmafra on 13/10/16.
+ */
+
 public class Main {
 
     public static String CSV_URL_PROP = "input_trace_admission_control_url";
@@ -53,6 +58,10 @@ public class Main {
 
     }
 
+    /**
+     * Operation that inserts all existing tasks in the csv file within the mapOfTasks
+     * @param properties
+     */
     private static void readCSV(Properties properties){
 
         try {
@@ -87,7 +96,12 @@ public class Main {
 
     }
 
-
+    /**
+     * Operation that inserts the tasks that existis in both structures, tasksOfInterval and mapOfTasks, into tasksToBD
+     * @param tasksToBd - List with the filtered tasks
+     * @param tasksOfInterval - List os tasks that will be filtered
+     * @throws IOException
+     */
     private static void filterAdmittedTasks(List<TaskInfo> tasksToBd, List<TaskInfo> tasksOfInterval) throws IOException {
 
         for (TaskInfo taskInfo : tasksOfInterval) {
