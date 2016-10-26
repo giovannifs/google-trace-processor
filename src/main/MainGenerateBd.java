@@ -1,3 +1,8 @@
+package main;
+
+import bd_processor.OutputProcessor;
+import bd_processor.TaskInfo;
+
 import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
