@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Properties;
 
 /**
+ * The main that calculates the mean of availability by priority from a csv file
  * Created by jvmafra on 13/10/16.
  */
 public class MainCalculateAvailability {

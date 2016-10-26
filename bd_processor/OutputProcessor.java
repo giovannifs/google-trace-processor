@@ -110,8 +110,8 @@ public class OutputProcessor extends DataStore{
 
 
     /**
-     * Operation that add a task info into a batch to prepare that will be inserted into BD
-     * @param insertMemberStatement
+     * Operation that add a task info into a statement to prepare that will be inserted into BD
+     * @param insertMemberStatement - The statement that will be inserted into BD
      * @param taskInfo - A unique object of TaskInfo
      * @throws SQLException
      */
