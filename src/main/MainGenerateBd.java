@@ -98,6 +98,16 @@ public class MainGenerateBd {
         System.out.println(taskId);
     }
 
+    /**
+     * Method that adds a set of tasks pre-defined by the parameters to a list.
+     * @param taskList - The list that will receive the tasks;
+     * @param subtmitTimeInMinutes - The time of submission of all tasks generated;
+     * @param valueOfPriority - The numeber of priority for all taks;
+     * @param finishTimeInMinutes - The time that finished all tasks;
+     * @param cpuRequested - The value of cpu requisition;
+     * @param userClass- The name of the user class;
+     */
+
     private static void createAndAddTasksToList(List<TaskInfo> taskList, double subtmitTimeInMinutes, int valueOfPriority, double finishTimeInMinutes, double cpuRequested, String userClass) {
 
         for (int i = 0; i < NUMBER_OF_TASKS; i++) {

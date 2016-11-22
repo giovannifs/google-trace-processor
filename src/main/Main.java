@@ -40,7 +40,7 @@ public class Main {
             mapOfTasks = new HashMap<>();
 
             readCSV(properties);
-            System.out.println("Finalizando processamento do mapa. Seu tamanho é: " + mapOfTasks.size());
+            System.out.println("Finishing map processing. Its size is: " + mapOfTasks.size());
 
             List<TaskInfo> tasksToBd = new ArrayList<>();
             List<TaskInfo> tasksOfInterval;
@@ -54,7 +54,7 @@ public class Main {
 
                 filterAdmittedTasks(tasksToBd, tasksOfInterval);
 
-                System.out.println("Adicionando " + tasksToBd.size() + " ao BD");
+                System.out.println("Adding " + tasksToBd.size() + " to BD");
 
                 outputProcessor.addTasks(tasksToBd);
                 tasksToBd.clear();

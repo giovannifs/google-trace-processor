@@ -138,6 +138,11 @@ public class OutputProcessor extends DataStore {
 
     private static final String SELECT_ALL_TASKS_SQL = "SELECT * FROM tasks";
 
+    /**
+     *Method that collects all tasks stored in a BD and add to a list, and then return the list with tasks.
+     * @return List with all tasks that exists in the BD.
+     */
+
     public List<TaskInfo> getAllTasks() {
         Statement statement = null;
         Connection conn = null;
