@@ -11,8 +11,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
-import static org.junit.Assert.*;
-
 /**
  * Created by Alessandro Lia Fook Santos and Joao Victor Mafra on 26/10/16.
  */
@@ -25,6 +23,8 @@ public class OutputProcessorTest {
     public static final String DATABASE_URL_PROP = "output_trace_database_url";
 
     private static Properties properties;
+
+    private static  final int NUMBER_OF_TASKS = 50;
 
     OutputProcessor dataStore;
 
@@ -109,7 +109,7 @@ public class OutputProcessorTest {
 
         int taskId = 0;
 
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < NUMBER_OF_TASKS; i++) {
             task1 = new TaskInfo(submitTime, jobId, taskId++, user, schedulingClass, priority - 1, runtime, finishingTime, cpuReq, memReq, userClass);
             taskStates.add(task1);
         }
@@ -119,7 +119,7 @@ public class OutputProcessorTest {
 
         List<TaskInfo> taskStates2 = new ArrayList<>();
 
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < NUMBER_OF_TASKS; i++) {
             task1 = new TaskInfo(submitTime, jobId, taskId++, user, schedulingClass, priority - 1, runtime, finishingTime, cpuReq, memReq, userClass);
             taskStates.add(task1);
             taskStates2.add(task1);

@@ -26,8 +26,6 @@ public class InputProcessorTest {
     private static String databaseFile2 = "inputTraceTest_2.sqlite3";
     private static String databaseURL2 = "jdbc:sqlite:" + databaseFile2;
 
-
-
     private static double DEFAULT_RUNTIME = 1000;
     private static Properties properties;
     private static Properties properties2;
@@ -195,7 +193,6 @@ public class InputProcessorTest {
         Assert.assertEquals(NUMBER_OF_TASKS/2,
                 inputTrace.getTaskInterval(0, getTimeInMicro(NUMBER_OF_TASKS + 1)).size());
 
-
     }
 
     @Test
@@ -208,7 +205,6 @@ public class InputProcessorTest {
         // test the number of tasks between time 0 and 50 (although the Interval size is greater than maxSubmitTime)
         Assert.assertEquals(NUMBER_OF_TASKS/2,
                 inputTrace.getTaskInterval(0, getTimeInMicro(NUMBER_OF_TASKS + 1)).size());
-
 
     }
 
@@ -314,7 +310,6 @@ public class InputProcessorTest {
         Assert.assertEquals(1,
                 inputTrace.getTaskInterval(0, getTimeInMicro(NUMBER_OF_TASKS + 1)).size());
 
-
         min = getTimeInMicro(0);
         max = getTimeInMicro(0);
         properties.setProperty(InputProcessor.MIN_INTERESTED_TIME_PROP, String.valueOf(min));
@@ -380,7 +375,6 @@ public class InputProcessorTest {
         Assert.assertEquals(generateListOfGoogleTasks(1, (NUMBER_OF_TASKS / 2) - 1),
                 inputTrace.getTaskInterval(0, getTimeInMicro(NUMBER_OF_TASKS / 2)));
 
-
         Assert.assertEquals(generateListOfGoogleTasks(NUMBER_OF_TASKS / 2, NUMBER_OF_TASKS - 1),
                 inputTrace.getTaskInterval(1, getTimeInMicro(NUMBER_OF_TASKS / 2)));
 
@@ -438,7 +432,6 @@ public class InputProcessorTest {
             connection2.close();
         }
 
-
         InputProcessor inputTrace = new InputProcessor(
                 properties2);
 
@@ -450,8 +443,6 @@ public class InputProcessorTest {
 
         Assert.assertEquals(2,
                 inputTrace.getTaskInterval(1, getTimeInMicro(1)).size());
-
-
 
         // tests if we have 2 tasks in total
         Assert.assertEquals(2,
@@ -491,5 +482,4 @@ public class InputProcessorTest {
 
         return listOfTasks;
     }
-
 }

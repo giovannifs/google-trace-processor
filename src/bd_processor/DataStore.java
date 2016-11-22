@@ -15,33 +15,42 @@ public class DataStore {
     private String databaseURL;
 
     public DataStore(String databaseURL) {
-        setDatabaseURL(databaseURL);
 
+        setDatabaseURL(databaseURL);
     }
 
     protected Connection getConnection() throws SQLException {
+
         try {
             return DriverManager.getConnection(getDatabaseURL());
+
         } catch (SQLException e) {
             throw e;
         }
     }
 
     protected void close(Statement statement, Connection conn) {
+
         if (statement != null) {
+
             try {
+
                 if (!statement.isClosed()) {
                     statement.close();
                 }
+
             } catch (SQLException e) {
             }
         }
 
         if (conn != null) {
+
             try {
+
                 if (!conn.isClosed()) {
                     conn.close();
                 }
+
             } catch (SQLException e) {
             }
         }
@@ -55,4 +64,3 @@ public class DataStore {
         this.databaseURL = databaseURL;
     }
 }
-

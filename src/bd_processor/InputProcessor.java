@@ -36,7 +36,6 @@ public class InputProcessor extends DataStore {
 
         maxInterestedTime = isPropertySet(properties, MAX_INTERESTED_TIME_PROP)? Double
                 .parseDouble(properties.getProperty(MAX_INTERESTED_TIME_PROP)) : getMaxTraceTime() + 1;
-
     }
 
     /**
@@ -45,7 +44,6 @@ public class InputProcessor extends DataStore {
      * @return An object of TaskInfo that represents a VM.
      */
     private TaskInfo getTask(ResultSet results) {
-
 
         try {
 
@@ -85,11 +83,10 @@ public class InputProcessor extends DataStore {
         double minTime = Math.max(getMinInterestedTime(), (intervalIndex * intervalSize));
         double maxTime = Math.min(getMaxInterestedTime(), ((intervalIndex + 1) * intervalSize));
 
-
         List<TaskInfo> googleTasks = new ArrayList<>();
-
         Statement statement;
         Connection connection;
+
         try {
             connection = getConnection();
 
@@ -121,8 +118,7 @@ public class InputProcessor extends DataStore {
      * @param intervalSize - Time gap of each interval index
      * @return a boolean if has more tasks in BD in the interval
      */
-    public boolean hasMoreEvents(int intervalIndex,
-                                 double intervalSize) {
+    public boolean hasMoreEvents(int intervalIndex, double intervalSize) {
         return (intervalIndex >= 0 && (intervalIndex * intervalSize) <= getMaxInterestedTime());
     }
 

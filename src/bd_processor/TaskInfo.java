@@ -22,8 +22,9 @@ public class TaskInfo {
      * @param memReq - memory requested by VM
      * @param userClass - user class of VM
      */
-    public TaskInfo(double submitTime, double job_id, int task_id, String user, int schedulingClass, int priority, double runtime,
-                    double endTime, double cpuReq, double memReq, String userClass){
+    public TaskInfo(double submitTime, double job_id, int task_id, String user, int schedulingClass, int priority,
+                    double runtime, double endTime, double cpuReq, double memReq, String userClass){
+
         setJob_id(job_id);
         setTask_id(task_id);
         setSubmitTime(submitTime);
@@ -81,10 +82,7 @@ public class TaskInfo {
         this.task_id = tid;
     }
 
-    public double getSubmitTime() {
-
-        return submitTime;
-    }
+    public double getSubmitTime() { return submitTime; }
 
     public double getRuntime() {
         return runtime;
@@ -145,6 +143,5 @@ public class TaskInfo {
         if (schedulingClass != taskInfo.schedulingClass) return false;
         if (!user.equals(taskInfo.user)) return false;
         return userClass.equals(taskInfo.userClass);
-
     }
 }

@@ -9,7 +9,6 @@ import java.util.Properties;
 
 public class OutputProcessor extends DataStore {
 
-
     private static final String TABLE_NAME = "tasks";
 
     /**
@@ -52,7 +51,6 @@ public class OutputProcessor extends DataStore {
     private static final String INSERT_TASK_SQL = "INSERT INTO " + TABLE_NAME
             + " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-
     /**
      * Operation that add a list of tasks into a BD
      * @param list_of_tasks that contains objects of TaskInfo
@@ -64,7 +62,6 @@ public class OutputProcessor extends DataStore {
         }
 
         PreparedStatement insertMemberStatement = null;
-
         Connection connection = null;
 
         try {
@@ -88,16 +85,20 @@ public class OutputProcessor extends DataStore {
 
             connection.commit();
             return true;
+
         } catch (SQLException e) {
             e.printStackTrace();
+
             try {
                 if (connection != null) {
                     connection.rollback();
                 }
+
             } catch (SQLException e1) {
                 e1.printStackTrace();
             }
             return false;
+
         } finally {
             close(insertMemberStatement, connection);
         }
@@ -105,6 +106,7 @@ public class OutputProcessor extends DataStore {
 
     private boolean executionFailed(Connection connection, int[] executeBatch)
             throws SQLException {
+
         for (int i : executeBatch) {
             if (i == PreparedStatement.EXECUTE_FAILED) {
                 return true;
@@ -112,7 +114,6 @@ public class OutputProcessor extends DataStore {
         }
         return false;
     }
-
 
     /**
      * Operation that add a task info into a batch to prepare that will be inserted into BD
@@ -144,14 +145,15 @@ public class OutputProcessor extends DataStore {
      */
 
     public List<TaskInfo> getAllTasks() {
+
         Statement statement = null;
         Connection conn = null;
         List<TaskInfo> taskStates = new ArrayList<TaskInfo>();
 
         try {
+
             conn = getConnection();
             statement = conn.createStatement();
-
             statement.execute(SELECT_ALL_TASKS_SQL);
             ResultSet results = statement.getResultSet();
 
@@ -161,10 +163,11 @@ public class OutputProcessor extends DataStore {
                         results.getDouble("runtime"), results.getDouble("endTime"), results.getDouble("cpuReq"),
                         results.getDouble("memReq"), results.getString("userClass")));
             }
+
             return taskStates;
+
         } catch (SQLException e) {
             return null;
         }
     }
-
 }
