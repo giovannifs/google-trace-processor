@@ -30,21 +30,26 @@ public class ConvertTimesMain {
 
             List<TaskInfo> tasksOfInterval = inputProcessor.getTaskInterval(intervalIndex, getTimeInMicro(COLLECT_INTERVAL_SIZE));
 
+            int totalTasks = 0;
             while (tasksOfInterval != null) {
 
                 if (tasksOfInterval != null)
                     System.out.println("Interval index " + intervalIndex + " = " + tasksOfInterval.size());
 
                 List<TaskInfo> tasksWithConvertedTimes = convertTimeFromTasks(tasksOfInterval, epochSize);
+                totalTasks += tasksOfInterval.size();
 
-                System.out.println("Adding " + tasksWithConvertedTimes.size() + " to BD");
+//                System.out.println("Adding " + tasksWithConvertedTimes.size() + " to BD");
 
                 outputProcessor.addTasks(tasksWithConvertedTimes);
 //                tasksWithConvertedTimes.clear();
                 intervalIndex++;
                 
                 tasksOfInterval = inputProcessor.getTaskInterval(intervalIndex, getTimeInMicro(COLLECT_INTERVAL_SIZE));
-            }			
+            }
+
+			System.out.println("TOTAL READ TASKS:");
+			System.out.println(totalTasks);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
